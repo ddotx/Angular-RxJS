@@ -3,17 +3,23 @@
     {{pageTitle}}
   </div>
 
-  <div class="card-body">
+  <div class="card-body"
+       *ngIf="vm$ | async as vm">
     <div class="container">
       <div class="row justify-content-between">
         <div class="col-3">
           <select class="form-control"
                   (change)="onSelected($event.target.value)">
             <option value="0">- Display All -</option>
-            <option *ngFor="let category of categories"
+            <option *ngFor="let category of vm.categories"
                     [value]="category.id">{{ category.name }}</option>
           </select>
         </div>
+        <!-- <div class="col-2">
+          <button type="button"
+                  class="btn btn-outline-secondary"
+                  [routerLink]="['addproduct']">Form</button>
+        </div> -->
         <div class="col-2">
           <button type="button"
                   class="btn btn-outline-secondary"
@@ -24,7 +30,7 @@
 
     <div class="table-responsive">
       <table class="table mb-0"
-             *ngIf="products$ | async as products">
+             *ngIf="vm.products">
         <thead>
           <tr>
             <th>Product</th>
@@ -34,11 +40,11 @@
             <th>In Stock</th>
           </tr>
         </thead>
-        <tbody *ngFor="let product of products">
+        <tbody *ngFor="let product of vm.products">
           <tr>
             <td>{{ product.productName }}</td>
             <td>{{ product.productCode }}</td>
-            <td>{{ product.categoryId }}</td>
+            <td>{{ product.category }}</td>
             <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td>
             <td>{{ product.quantityInStock }}</td>
           </tr>
@@ -49,7 +55,9 @@
   </div>
 </div>
 
+<pm-product-edit></pm-product-edit>
+
 <div class="alert alert-danger"
-     *ngIf="errorMessage">
+     *ngIf="errorMessage$ | async as errorMessage">
   {{ errorMessage }}
 </div>

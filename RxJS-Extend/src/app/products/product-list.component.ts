@@ -7,6 +7,7 @@ import { ProductService } from './product.service';
 import { ProductCategoryService } from '../product-categories/product-category.service';
 
 @Component({
+  selector: 'pm-product-all',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,9 +23,13 @@ export class ProductListComponent {
 
   // Merge Data stream with Action stream
   // To filter to the selected category
-  
+
   products$ = combineLatest([
-    this.productService.productsWithAdd$,
+
+    // this.productService.productsWithAdd$,
+    // TODO: Refactor to Product from Add Product form
+    this.productService.productsAfterPost$,
+
     this.categorySelectedAction$
   ])
     .pipe(
@@ -61,7 +66,8 @@ export class ProductListComponent {
               private productCategoryService: ProductCategoryService) { }
 
   onAdd(): void {
-    this.productService.addProduct();
+    // this.productService.addProduct();
+    this.productService.addFormProduct();
   }
 
   onSelected(categoryId: string): void {
